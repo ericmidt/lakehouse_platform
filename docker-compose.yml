@@ -55,6 +55,35 @@ services:
       exit 0;
       "
 
+  iceberg-rest:
+    image: apache/iceberg-rest-fixture:latest
+    container_name: lakehouse-iceberg-rest
+    depends_on:
+      - minio
+    ports:
+      - "8181:8181"
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+      CATALOG_WAREHOUSE: s3://warehouse/
+      CATALOG_IO__IMPL: org.apache.iceberg.aws.s3.S3FileIO
+      CATALOG_S3_ENDPOINT: http://minio:9000
+      CATALOG_S3_PATH__STYLE__ACCESS: "true"
+      CATALOG_S3_ACCESS__KEY__ID: minioadmin
+      CATALOG_S3_SECRET__ACCESS__KEY: minioadmin
+
+  trino:
+    image: trinodb/trino:latest
+    container_name: lakehouse-trino
+    depends_on:
+      - iceberg-rest
+      - minio
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./infra/docker/trino/catalog:/etc/trino/catalog
+
 volumes:
   redpanda-data:
   minio-data:

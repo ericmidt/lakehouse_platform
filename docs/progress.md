@@ -24,3 +24,17 @@ Python event generator -> Redpanda topics -> future Spark Structured Streaming -
 ## Notes
 
 The goal is not only to build the project, but to understand how each platform component works in practice.
+
+## Phase 4: Iceberg and Trino
+
+Added local Iceberg and Trino components:
+
+- Iceberg REST Catalog
+- Trino service
+- Trino Iceberg catalog configuration
+- Smoke test for creating and querying Iceberg tables
+- Metadata table inspection through $files and $history
+
+Current architecture:
+
+Python event generator -> Redpanda topics -> future Spark Structured Streaming -> Iceberg tables on MinIO -> Trino SQL queries.
