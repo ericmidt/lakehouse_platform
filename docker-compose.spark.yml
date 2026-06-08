@@ -1,0 +1,18 @@
+services:
+  spark:
+    image: tabulario/spark-iceberg:latest
+    container_name: lakehouse-spark
+    depends_on:
+      - iceberg-rest
+      - minio
+      - redpanda
+    environment:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: minioadmin
+      AWS_SECRET_ACCESS_KEY: minioadmin
+    volumes:
+      - ./streaming/spark/jobs:/home/iceberg/jobs
+      - ./streaming/spark/conf:/home/iceberg/conf
+      - ./streaming/spark/checkpoints:/home/iceberg/checkpoints
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["while true; do sleep 3600; done"]
