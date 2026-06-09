@@ -7,3 +7,4 @@ dbt_packages/
 logs/
 tmp/
 .DS_Store
+streaming/spark/checkpoints/
